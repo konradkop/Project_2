@@ -2,10 +2,15 @@ const router = require("express").Router();
 const { User, Conversation, Message } = require("../../db/models");
 const { Op } = require("sequelize");
 const onlineUsers = require("../../onlineUsers");
-
+const moment = require('moment')
 // get all conversations for a user, include latest message text for preview, and all messages
 // include other user model so we have info on username/profile pic (don't include current user info)
 // TODO: for scalability, implement lazy loading
+function sortTime(a, b) {
+  return moment(a.createdAt).diff(moment(b.createdAt)) 
+}
+
+
 router.get("/", async (req, res, next) => {
   try {
     if (!req.user) {
@@ -70,6 +75,7 @@ router.get("/", async (req, res, next) => {
 
       // set properties for notification count and latest message preview
       convoJSON.latestMessageText = convoJSON.messages[0].text;
+      convoJSON.messages.sort(sortTime)
       conversations[i] = convoJSON;
     }
 
