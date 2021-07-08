@@ -13,14 +13,15 @@ router.post("/", async (req, res, next) => {
 
     const senderId = req.user.id;
     const { recipientId, text, conversationId, sender } = req.body;
-
+    
+    console.log(req.body)
     // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
       let specificConvo = await Conversation.findByPk(conversationId)
 
       //even if we have a conversationId- we still have to check if the two parties are actually a part of that conversation
-      if (specificConvo.user1Id === senderId && specificConvo.user2Id === recipientId){
-          const message = await Message.create({ senderId, text, conversationId});
+      if (specificConvo.user1Id === senderId){
+          const message = await Message.create({ senderId, text, conversationId, isSeen: false});
           return res.json({ message, sender });
       }
     }
@@ -46,6 +47,7 @@ router.post("/", async (req, res, next) => {
       senderId,
       text,
       conversationId: conversation.id,
+      isSeen: false
     });
     res.json({ message, sender });
   } catch (error) {
