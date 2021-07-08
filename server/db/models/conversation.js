@@ -17,7 +17,6 @@ Conversation.findConversation = async function (user1Id, user2Id) {
       }
     }
   });
-
   // return conversation or null if it doesn't exist
   return conversation;
 };
