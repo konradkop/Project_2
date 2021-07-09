@@ -1,8 +1,15 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
+  outerRoot:{
+    display: "flex",
+    flexDirection: "row",
+    flexGrow: 1,
+  },
+
   root: {
     display: "flex",
     justifyContent: "space-between",
@@ -18,40 +25,75 @@ const useStyles = makeStyles((theme) => ({
     color: "#9CADC8",
     letterSpacing: -0.17,
   },
+  previewTextBold: {
+    fontSize: 12,
+    color: "black",
+    fontWeight: "bold",
+    letterSpacing: -0.17,
+  },
   notification: {
-    height: 20,
-    width: 20,
+    height: 30,
+    width: 30,
     backgroundColor: "#3F92FF",
-    marginRight: 10,
     color: "white",
-    fontSize: 10,
+    fontSize: 15,
     letterSpacing: -0.5,
     fontWeight: "bold",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
+    borderRadius: 80,
   },
 }));
 
 const ChatContent = (props) => {
   const classes = useStyles();
 
-  const { conversation } = props;
-  const { latestMessageText, otherUser } = conversation;
+  const { conversation, user, activeConversation } = props;
+  const { latestMessageText, otherUser} = conversation;
+  let unreadMessageCount = 0
+    for(let x = 0; x < conversation.messages.length; x++){
+      //this if statement basically checks:
+      //has the message been seen yet?-> by the other party?
+      if(conversation.messages[x].isSeen === false && conversation.messages[x].senderId !== user.id){
+        unreadMessageCount = unreadMessageCount + 1
+      }
+  }
+  console.log("The unreadMessageCount is: ", unreadMessageCount)
 
   return (
-    <Box className={classes.root}>
-      <Box>
-        <Typography className={classes.username}>
+    <Box className={classes.outerRoot}>
+      <Box className={classes.root}>
+        <Box>
+          <Typography className={classes.username}>
           {otherUser.username}
-        </Typography>
-        <Typography className={classes.previewText}>
+         </Typography>
+           {unreadMessageCount > 0 ?
+          <Typography className={classes.previewTextBold}>
+            {latestMessageText}
+          </Typography>:
+          <Typography className={classes.previewText}>
           {latestMessageText}
-        </Typography>
+          </Typography>}
+        </Box>
+      </Box>
+      <Box justifyContent="flex-end">
+        {unreadMessageCount > 0
+            &&
+            <Box className={classes.notification}>
+              {unreadMessageCount}
+        </Box>}
       </Box>
     </Box>
   );
 };
 
-export default ChatContent;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    activeConversation: state.activeConversation
+  };
+};
+
+export default connect(mapStateToProps)(ChatContent);
+//  export default ChatContent;
