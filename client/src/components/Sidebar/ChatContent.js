@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
@@ -49,17 +49,20 @@ const useStyles = makeStyles((theme) => ({
 const ChatContent = (props) => {
   const classes = useStyles();
 
-  const { conversation, user, activeConversation } = props;
-  const { latestMessageText, otherUser} = conversation;
-  let unreadMessageCount = 0
-    for(let x = 0; x < conversation.messages.length; x++){
-      //this if statement basically checks:
-      //has the message been seen yet?-> by the other party?
-      if(conversation.messages[x].isSeen === false && conversation.messages[x].senderId !== user.id){
-        unreadMessageCount = unreadMessageCount + 1
+  const { conversation, user} = props;
+  const {latestMessageText, otherUser} = conversation;
+  const [unreadMessageCount, setunreadMessageCount] = useState(0)
+
+  useEffect(() => {
+    let tempCounter = 0
+    conversation.messages.forEach(message => {
+      if(!message.isSeen && message.senderId !== user.id){
+        tempCounter = tempCounter + 1
       }
-  }
-  console.log("The unreadMessageCount is: ", unreadMessageCount)
+    })
+    setunreadMessageCount(tempCounter)
+  },[latestMessageText])
+
 
   return (
     <Box className={classes.outerRoot}>
