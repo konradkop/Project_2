@@ -16,10 +16,11 @@ const Messages = (props) => {
   const { messages, otherUser, userId } = props;
   const classes = useStyles();
   
-  let maxID = 0
-  const lastSeenMessageID = messages.filter((message) => {
-    if(message.senderId === userId && message.id > maxID && message.isSeen === true){
-      maxID = message.id
+  let lastSeenMessageID = 0
+
+  messages.forEach((message) => {
+    if(message.senderId === userId && message.id > lastSeenMessageID && message.isSeen === true){
+      lastSeenMessageID = message.id
     }
   })
 
@@ -30,7 +31,7 @@ const Messages = (props) => {
         return message.senderId === userId ? (
           <>
           <SenderBubble key={message.id} text={message.text} time={time} />
-          {message.id === maxID &&
+          {message.id === lastSeenMessageID &&
             <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar}></Avatar>
           }
          </>   
