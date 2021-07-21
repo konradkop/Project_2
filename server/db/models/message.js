@@ -9,6 +9,9 @@ const Message = db.define("message", {
   senderId: {
     type: Sequelize.INTEGER,
     allowNull: false,
+  },
+  isSeen: {
+    type: Sequelize.BOOLEAN,
   }
 });
 

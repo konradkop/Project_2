@@ -4,6 +4,8 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
+import { fetchConversations } from "../../store/utils/thunkCreators";
+import {readConversations} from "../../store/conversations";
 
 const styles = {
   root: {
@@ -19,10 +21,26 @@ const styles = {
   },
 };
 
+
 class Chat extends Component {
+
   handleClick = async (conversation) => {
-    await this.props.setActiveChat(conversation.otherUser.username);
+    await this.props.setActiveChat(conversation);
+    await this.props.readConversations(conversation)
+    //readConversations sets the conversations to READ
   };
+
+
+  componentDidMount() {
+    const runRead = async () => {
+      if (this.props.conversation.otherUser.username === this.props.activeConversation){
+        await this.props.readConversations(this.props.conversation)
+      }
+    }
+
+    //adding an event listener to whenever the user is focused on the webpage
+    window.addEventListener("focus", runRead)
+  }
 
   render() {
     const { classes } = this.props;
@@ -49,7 +67,21 @@ const mapDispatchToProps = (dispatch) => {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
     },
+    fetchConversations: () => {
+      dispatch(fetchConversations());
+    },
+    readConversations: (oUser) => {
+      dispatch(readConversations(oUser));
+    },
   };
 };
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Chat));
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    activeConversation: state.activeConversation,
+    conversations: state.conversations
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Chat));

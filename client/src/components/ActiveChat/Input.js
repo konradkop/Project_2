@@ -3,6 +3,7 @@ import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage } from "../../store/utils/thunkCreators";
+import { fetchConversations } from "../../store/utils/thunkCreators";
 
 const styles = {
   root: {
@@ -76,6 +77,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     postMessage: (message) => {
       dispatch(postMessage(message));
+    },
+    fetchConversations: () => {
+      dispatch(fetchConversations());
     },
   };
 };
