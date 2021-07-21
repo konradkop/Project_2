@@ -45,7 +45,7 @@ const ActiveChat = (props) => {
               user={user}
             />
           </Box>
-        </>
+        </> 
       )}
     </Box>
   );
