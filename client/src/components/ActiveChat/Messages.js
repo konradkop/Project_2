@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Avatar,Typography } from "@material-ui/core";
 import { SenderBubble, OtherUserBubble } from "../ActiveChat";
@@ -15,13 +15,20 @@ const useStyles = makeStyles(() => ({
 const Messages = (props) => {
   const { messages, otherUser, userId } = props;
   const classes = useStyles();
-  
+  const [count, setCount] = useState(0);  
   let lastSeenMessageID = 0
 
-  messages.forEach((message) => {
-    if(message.senderId === userId && message.id > lastSeenMessageID && message.isSeen === true){
-      lastSeenMessageID = message.id
+
+  useEffect(()=> {
+    const runRead = async () => {
+      messages.forEach((message) => {
+        if(message.senderId === userId && message.id > lastSeenMessageID && message.isSeen){
+          lastSeenMessageID = message.id
+        }
+      })
+      setCount(lastSeenMessageID) 
     }
+    window.addEventListener("focus", runRead)
   })
 
   return (
@@ -31,7 +38,7 @@ const Messages = (props) => {
         return message.senderId === userId ? (
           <>
           <SenderBubble key={message.id} text={message.text} time={time} />
-          {message.id === lastSeenMessageID &&
+          {message.id === count &&
             <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar}></Avatar>
           }
          </>   
