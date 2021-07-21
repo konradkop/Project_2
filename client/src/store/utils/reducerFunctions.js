@@ -11,12 +11,22 @@ export const addMessageToStore = (state, payload) => {
     return [newConvo, ...state];
   }
 
+
   return state.map((convo) => {
+    
     if (convo.id === message.conversationId) {
-      const convoCopy = { ...convo };
+      const convoCopy = { ...convo }; 
+      convoCopy.messages.forEach((messg) => {
+        if(!messg.isSeen && messg.senderId !== convoCopy.otherUser.id && message.senderId === convoCopy.otherUser.id){
+          messg.isSeen = true
+        }
+        if(!messg.isSeen && messg.senderId === convoCopy.otherUser.id && message.senderId !== convoCopy.otherUser.id){
+          messg.isSeen = true
+        }
+      })
+
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
-
       return convoCopy;
     } else {
       return convo;
