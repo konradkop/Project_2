@@ -3,6 +3,29 @@ const { Conversation, Message } = require("../../db/models");
 const onlineUsers = require("../../onlineUsers");
 const { User } = require("../../db/models");
 
+
+router.put("/read", async (req, res, next) => {
+  const senderId = req.user.id;
+
+  const messageList = await Message.findAll({
+    where:{
+      conversationId: req.body.id,
+      isSeen: false
+    } 
+  })
+
+  for(let x = 0; x < messageList.length; x++){ 
+    if(messageList[x].dataValues.senderId !== senderId){
+      messageList[x].dataValues.isSeen = true
+      messageList[x].changed("isSeen", true)
+      console.log("changeing to isSeen ", messageList[x])
+      await messageList[x].save()
+    }
+}
+  res.sendStatus(200)
+})
+
+
 // expects {recipientId, text, conversationId } in body (conversationId will be null if no conversation exists yet)
 router.post("/", async (req, res, next) => {
   try {
@@ -31,8 +54,8 @@ router.post("/", async (req, res, next) => {
         if(messageList[x].dataValues.senderId !== senderId){
           messageList[x].dataValues.isSeen = true
           messageList[x].changed("isSeen", true)
-            await messageList[x].save()
-            await messageList[x].reload()
+          console.log("changeing to isSeen ", messageList[x])
+          await messageList[x].save()
         }
     }
 
