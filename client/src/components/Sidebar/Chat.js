@@ -4,7 +4,6 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
-import axios from "axios";
 import { fetchConversations } from "../../store/utils/thunkCreators";
 
 const styles = {
@@ -25,10 +24,7 @@ const styles = {
 class Chat extends Component {
 
   handleClick = async (conversation) => {
-    const { data } = await axios.post("/api/readMessages", {newConvo: this.props.conversation, oldConvo: null});
-    console.log(data)
     await this.props.setActiveChat(conversation.otherUser.username);
-    await this.props.fetchConversations()
   };
 
   render() {

@@ -3,7 +3,6 @@ import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage } from "../../store/utils/thunkCreators";
-import axios from "axios";
 import { fetchConversations } from "../../store/utils/thunkCreators";
 
 const styles = {
@@ -27,15 +26,7 @@ class Input extends Component {
     };
   }
 
-  handleRead = async (conversationId) => {
-    console.log(" THE conversation id is: " + this.props.conversationId)
-    let ActiveConvo = this.props.conversations.find((convo) => convo.id === this.props.conversationId)
-    const { data } = await axios.post("/api/readMessages", {newConvo: ActiveConvo, oldConvo: null});
-    await this.props.fetchConversations()
-  };
-
   handleChange = (event) => {
-    this.handleRead()
     this.setState({
       text: event.target.value,
     });
@@ -59,7 +50,7 @@ class Input extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <form className={classes.root} onSubmit={this.handleSubmit} onClick={() => this.handleRead(this.props.conversationId)}>
+      <form className={classes.root} onSubmit={this.handleSubmit}>
         <FormControl fullWidth hiddenLabel>
           <FilledInput
             classes={{ root: classes.input }}
