@@ -61,8 +61,7 @@ const ChatContent = (props) => {
       }
     })
     setunreadMessageCount(tempCounter)
-  },[latestMessageText])
-
+  },[conversation])
 
   return (
     <Box className={classes.outerRoot}>
