@@ -1,3 +1,5 @@
+import {readMessages} from "./thunkCreators";
+
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
@@ -13,7 +15,6 @@ export const addMessageToStore = (state, payload) => {
 
 
   return state.map((convo) => {
-    
     if (convo.id === message.conversationId) {
       const convoCopy = { ...convo }; 
       convoCopy.messages.forEach((messg) => {
@@ -33,6 +34,29 @@ export const addMessageToStore = (state, payload) => {
     }
   });
 };
+
+//change to Read
+export const changeToRead = (state, otherUser) => {
+
+  //will set the messages to isSeen -> in thunkCreators
+  readMessages(otherUser)
+
+  return state.map((convo) => {
+    if (convo.id === otherUser.id) {
+      const convoCopy = { ...convo }; 
+      convoCopy.messages.forEach((messg) => {
+        if(!messg.isSeen && messg.senderId === convoCopy.otherUser.id){
+          messg.isSeen = true
+        }
+      })
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+
+};
+
 
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
