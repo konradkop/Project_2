@@ -11,11 +11,15 @@ import {
   FormHelperText,
 } from "@material-ui/core";
 import { register } from "./store/utils/thunkCreators";
+import { useStyles } from './styles'; 
+import  LoginImage from './LoginImage'
+
 
 const Login = (props) => {
   const history = useHistory();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
+  const classes = useStyles();
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -37,38 +41,43 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")}>Login</Button>
+    <Grid className={classes.root}>
+      <LoginImage/>
+      <Box className={classes.mainScreen}>
+
+        <Grid container item className={classes.header}>
+          <Typography className={classes.textGrey}>Need to log in?</Typography>
+          <Button variant="contained" size="large" className={classes.secondaryButton} onClick={() => history.push("/login")}>Login</Button>
         </Grid>
-        <form onSubmit={handleRegister}>
-          <Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                  required
-                />
+        <form onSubmit={handleRegister} class={classes.form}>
+          <Grid class={classes.innerForm}>
+          <Typography className={classes.textLarge}>Create an Account.</Typography>
+            <Grid> 
+              <FormControl className={classes.formField} >
+                  <TextField
+                    aria-label="username"
+                    label="Username"
+                    name="username"
+                    type="text"
+                    required
+                    fullWidth
+                  />
               </FormControl>
             </Grid>
             <Grid>
-              <FormControl>
+              <FormControl  className={classes.formField}>
                 <TextField
                   label="E-mail address"
                   aria-label="e-mail address"
                   type="email"
                   name="email"
                   required
+                  fullWidth
                 />
               </FormControl>
             </Grid>
             <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
+              <FormControl className={classes.formField} error={!!formErrorMessage.confirmPassword}>
                 <TextField
                   aria-label="password"
                   label="Password"
@@ -76,6 +85,7 @@ const Login = (props) => {
                   inputProps={{ minLength: 6 }}
                   name="password"
                   required
+                  fullWidth
                 />
                 <FormHelperText>
                   {formErrorMessage.confirmPassword}
@@ -83,7 +93,7 @@ const Login = (props) => {
               </FormControl>
             </Grid>
             <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
+              <FormControl className={classes.formField} error={!!formErrorMessage.confirmPassword}>
                 <TextField
                   label="Confirm Password"
                   aria-label="confirm password"
@@ -91,15 +101,18 @@ const Login = (props) => {
                   inputProps={{ minLength: 6 }}
                   name="confirmPassword"
                   required
+                  fullWidth
                 />
                 <FormHelperText>
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </FormControl>
             </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
+            <Grid className={classes.primaryButtonContainer}>
+              <Button className={classes.primaryButton} type="submit" variant="contained" size="large">
+                Create
+              </Button>
+            </Grid>
           </Grid>
         </form>
       </Box>

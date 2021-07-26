@@ -10,8 +10,12 @@ import {
   TextField,
 } from "@material-ui/core";
 import { login } from "./store/utils/thunkCreators";
+import { useStyles } from './styles';   
+import  LoginImage from './LoginImage'
 
 const Login = (props) => {
+  const classes = useStyles();
+
   const history = useHistory();
   const { user, login } = props;
 
@@ -26,43 +30,50 @@ const Login = (props) => {
   if (user.id) {
     return <Redirect to="/home" />;
   }
+  
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
-        </Grid>
-        <form onSubmit={handleLogin}>
-          <Grid>
-            <Grid>
-              <FormControl margin="normal" required>
+    <Box className={classes.root}>
+        <LoginImage/>
+      <Grid className={classes.mainScreen}> 
+          <Grid container item className={classes.header}>
+            <Typography className={classes.textGreyWithMargin}>Don't have an account?</Typography>
+            <Button variant="contained" size="large" className={classes.secondaryButton}  onClick={() => history.push("/register")}>Create Account</Button>
+          </Grid>
+          <form onSubmit={handleLogin} class={classes.form}>
+          <FormControl fullWidth>
+            <Grid class={classes.innerForm}>
+              <Grid display="flex">
+              <Typography className={classes.textLarge}>Welcome Back!</Typography>
+                <FormControl margin="normal" required className={classes.formField}>
+                  <TextField
+                    aria-label="Username"
+                    label="Username"
+                    name="username"
+                    type="text"
+                    fullWidth
+                  />
+                </FormControl>
+              </Grid>
+              <FormControl margin="normal" required className={classes.formField}>
                 <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
+                  label="Password"
+                  aria-label="Password"
+                  type="password"
+                  name="password"
+                  fullWidth
                 />
               </FormControl>
+              <Grid className={classes.primaryButtonContainer}>
+                <Button type="submit" variant="contained" size="large"  className={classes.primaryButton}>
+                  Login
+                </Button>
+              </Grid>
             </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
-              />
             </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
-                Login
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Box>
-    </Grid>
+          </form>
+      </Grid>
+    </Box>
   );
 };
 
