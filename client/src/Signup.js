@@ -9,11 +9,10 @@ import {
   FormControl,
   TextField,
   FormHelperText,
-  Icon,
 } from "@material-ui/core";
 import { register } from "./store/utils/thunkCreators";
-import bubble from "./images/bubble.svg" 
 import { useStyles } from './styles'; 
+import  LoginImage from './LoginImage'
 
 
 const Login = (props) => {
@@ -43,15 +42,7 @@ const Login = (props) => {
 
   return (
     <Grid className={classes.root}>
-      <Grid className={classes.image}>
-        <Grid className={classes.imageText}>
-          <Icon>
-            <img src={bubble} alt="bubble" class={classes.icon}/>
-          </Icon>
-        <Typography className={classes.imageWords}>Converse with anyone with any language</Typography>
-      </Grid>
-    </Grid>
-
+      <LoginImage/>
       <Box className={classes.mainScreen}>
 
         <Grid container item className={classes.header}>

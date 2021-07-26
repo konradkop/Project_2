@@ -32,10 +32,10 @@ export const useStyles = makeStyles(theme => ({
         textAlign: "center"
       },
       imageWords:{ 
-        fontSize: 40,
+        fontSize: theme.typography.fontSizeLar,
         color: theme.palette.white.main,
         [theme.breakpoints.down("sm")]: {
-          fontSize: 20,
+          fontSize: theme.typography.fontSizeMed,
           margin:  theme.spacing(5),
         }
       },
@@ -85,14 +85,14 @@ export const useStyles = makeStyles(theme => ({
       secondaryButton:{
         color: theme.palette.primary.main,
         backgroundColor: theme.palette.white.main,
-        padding: "12px 28px",
+        padding: theme.buttonPadding,
       },
     
       textLarge:{
-        fontSize: 45,
+        fontSize: theme.typography.fontSizeLar,
         fontWeight: "bold",
         [theme.breakpoints.down("sm")]: {
-          fontSize: 30,
+          fontSize: theme.typography.fontSizeMed,
         }
       },
 
@@ -118,8 +118,8 @@ export const useStyles = makeStyles(theme => ({
       primaryButton:{
         color: theme.palette.white.main,
         backgroundColor: theme.palette.primary.main,
-        padding: "12px 70px",
-        fontSize: 20,
+        padding: theme.buttonPadding,
+        fontSize: theme.typography.fontSizeMed,
         fontWeight: "bold",
       }
 }));
