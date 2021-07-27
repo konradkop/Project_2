@@ -15,7 +15,7 @@ const LoginImage = () => {
     <Grid className={classes.image}>
       <Grid className={classes.imageText}>
         <Icon>
-          <img src={bubble} alt="bubble" class={classes.icon}/>
+          <img src={bubble} alt="bubble" className={classes.icon}/>
         </Icon>
         <Typography className={classes.imageWords}>Converse with anyone with any language</Typography>
       </Grid>
